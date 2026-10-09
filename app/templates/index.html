@@ -11,6 +11,7 @@
       <th scope="col">Product ID</th>
       <th scope="col">Product Name</th>
       <th scope="col">Price</th>
+      {% if current_user.is_authenticated %}<th scope="col">Wishlist</th>{% endif %}
     </tr>
   </thead>
   <tbody>
@@ -19,6 +20,12 @@
         <th scope="row">{{product.id}}</th>
         <td>{{product.name}}</td>
         <td>{{product.price}}</td>
+        {% if current_user.is_authenticated %}
+        <td><form action="{{ url_for('wishlist.wishlist_add', product_id=product.id) }}" method="POST">
+          {{ wishlist_form.hidden_tag() }}
+          {{ wishlist_form.submit(class_='btn btn-light') }}
+        </form></td>
+        {% endif %}
       </tr>
     {% endfor %}
   </tbody>

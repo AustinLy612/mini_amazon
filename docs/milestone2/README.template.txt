@@ -4,10 +4,10 @@ Team name: [fill in]
 Repository: https://github.com/AustinLy612/mini_amazon
 
 Members / roles / progress since Milestone 1:
-Austin - Users Guru - [actual work and local setup/tutorial status]
-Jason - Products Guru - [actual work and local setup/tutorial status]
-Grace - Carts Guru - Set up and ran the Mini-Amazon skeleton in the existing course Docker environment using Python, Flask and PostgreSQL. Created an independent development database and verified the login/cart browser flow. Designed the CartItems, Orders and OrderItems tables, their keys and constraints, the Inventory/Users/Products integration contracts, atomic checkout behavior, and buyer-facing page flows. Added an authenticated read-only cart prototype and six passing SQLite read-path integration tests. Tutorial completion is pending confirmation; checkout and cart editing are design-only at this milestone.
-William - Sellers Guru - [actual work and local setup/tutorial status]
+Leyang Han - Users Guru - [actual work and local setup/tutorial status]
+Tiancheng Yu - Products Guru - [actual work and local setup/tutorial status]
+Ziyi Shen - Carts Guru - Ran the skeleton in the course Docker environment. Completed the wishlist tutorial implementation (database/fixtures, SQL model, authenticated HTML and POST routes, add buttons and relative-time display) with CSRF protection. Prepared the Cart/Order database and page-by-page website design, integration contracts and atomic checkout design. Added a read-only cart prototype. Validation passed eleven SQLite integration tests and a separate PostgreSQL smoke test covering real login, wishlist writes, cart reads, account isolation, persistence across application recreation and database constraints. Cart editing, checkout and order details are planned for later milestones; shared schema approval and personal tutorial walkthrough remain pending.
+[Confirm member name] - Sellers Guru - [actual work and local setup/tutorial status]
 
 Submission checklist:
 - Replace all placeholders and use actual completed work only.

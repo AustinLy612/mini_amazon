@@ -19,11 +19,11 @@ class CartTests(unittest.TestCase):
         statements = [
             'CREATE TABLE Users (id INTEGER PRIMARY KEY, email TEXT, firstname TEXT, lastname TEXT)',
             'CREATE TABLE Products (id INTEGER PRIMARY KEY, name TEXT, price NUMERIC, available BOOLEAN)',
-            'CREATE TABLE Inventory (seller_id INTEGER, product_id INTEGER, quantity INTEGER, active BOOLEAN)',
+            'CREATE TABLE Inventory (seller_id INTEGER, product_id INTEGER, quantity INTEGER)',
             'CREATE TABLE CartItems (buyer_id INTEGER, seller_id INTEGER, product_id INTEGER, quantity INTEGER)',
             "INSERT INTO Users VALUES (1,'a@t.test','Buyer','One'), (2,'b@t.test','Buyer','Two'), (3,'s@t.test','Seller','One'), (4,'x@t.test','Seller','Two')",
             "INSERT INTO Products VALUES (10,'Tea <special>',2.99,1),(11,'Coffee',0.1,1)",
-            'INSERT INTO Inventory VALUES (3,10,5,1),(4,10,0,0),(3,11,2,1)',
+            'INSERT INTO Inventory VALUES (3,10,5),(4,10,0),(3,11,2)',
             'INSERT INTO CartItems VALUES (1,3,10,2),(1,4,10,1),(2,3,11,3)',
         ]
         with self.app.db.engine.begin() as conn:
@@ -80,6 +80,18 @@ class CartTests(unittest.TestCase):
         self.client = self.app.test_client()
         self.login(1)
         self.assertEqual(before, self.client.get('/api/cart').get_json())
+
+    def test_removed_listing_remains_visible(self):
+        with self.app.db.engine.begin() as conn:
+            conn.execute(text('DELETE FROM Inventory WHERE seller_id=3 AND product_id=10'))
+        self.login(1)
+        data = self.client.get('/api/cart').get_json()
+        self.assertEqual(len(data['items']), 2)
+        removed = data['items'][0]
+        self.assertEqual(removed['stock'], 0)
+        self.assertFalse(removed['available'])
+        self.assertEqual(data['total'], '8.97')
+        self.assertIn(b'Tea &lt;special&gt;', self.client.get('/cart').data)
 
     def test_query_parameter_binding(self):
         with self.app.app_context():

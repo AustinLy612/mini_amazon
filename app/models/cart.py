@@ -11,12 +11,12 @@ class Cart:
         rows = app.db.execute("""
 SELECT c.product_id, c.seller_id, p.name,
        u.firstname || ' ' || u.lastname AS seller_name,
-       c.quantity, p.price AS unit_price, i.quantity AS stock,
-       (i.active AND COALESCE(p.available, FALSE)) AS available
+       c.quantity, p.price AS unit_price, COALESCE(i.quantity, 0) AS stock,
+       (COALESCE(i.quantity, 0) > 0) AS available
 FROM CartItems c
 JOIN Products p ON p.id = c.product_id
 JOIN Users u ON u.id = c.seller_id
-JOIN Inventory i ON i.seller_id = c.seller_id AND i.product_id = c.product_id
+LEFT JOIN Inventory i ON i.seller_id = c.seller_id AND i.product_id = c.product_id
 WHERE c.buyer_id = :buyer_id
 ORDER BY c.product_id, c.seller_id
 """, buyer_id=buyer_id)

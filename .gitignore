@@ -4,3 +4,5 @@
 poetry.lock
 
 .flaskenv
+
+.DS_Store

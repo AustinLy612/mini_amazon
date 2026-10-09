@@ -7,12 +7,13 @@ erDiagram
     Users ||--o{ Inventory : sells
     Products ||--o{ Inventory : lists
     Users ||--o{ CartItems : owns
-    Inventory ||--o{ CartItems : references
+    Products ||--o{ CartItems : selected
+    Users ||--o{ CartItems : sells
     Orders ||--|{ OrderItems : contains
     Users ||--o{ OrderItems : fulfills
     Products ||--o{ OrderItems : identifies
 ```
-Every order contains at least one item by checkout application logic, not by an ordinary foreign key alone. Inventory uses (seller_id, product_id); CartItems uses (buyer_id, seller_id, product_id); OrderItems uses (order_id, seller_id, product_id). Empty carts have no rows. OrderItems does not depend on live Inventory. All nullable/required fields and checks are specified in CARTS_DESIGN.md and db/carts_schema.sql.
+Every order contains at least one item by checkout application logic, not by an ordinary foreign key alone. Inventory uses (seller_id, product_id); CartItems uses (buyer_id, product_id, seller_id); OrderItems uses id as PK plus UNIQUE(order_id, product_id, seller_id). Empty carts have no rows. Neither CartItems nor OrderItems has a foreign key to live Inventory; cart reads use LEFT JOIN. All nullable/required fields and checks are specified in CARTS_DESIGN.md and db/carts_schema.sql.
 
 ## Planned navigation
 ```mermaid

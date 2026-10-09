@@ -137,3 +137,22 @@ database).  This file is NOT tracked by `git` and it was automatically
 generated when you first ran `./install.sh`.  Don't check it into
 `git` because your credentials would be exposed to everybody on GitLab
 if you are not careful.
+
+## Carts Milestone 2 contribution (Ziyi Shen)
+
+See [Carts design](docs/milestone2/CARTS_DESIGN.md),
+[report PDF](docs/milestone2/Cart_Order_Milestone2.pdf), and
+[validation record](docs/milestone2/VALIDATION.md).
+The wishlist tutorial is complete; `/cart` and `/api/cart` are authenticated,
+read-only prototypes. Cart mutations, checkout and order detail remain planned.
+
+After loading the small skeleton database, apply `db/carts_schema.sql` once and
+optionally `db/carts_demo.sql`. Do not apply this bootstrap over another member's
+shared schema: review the Users/Products/Inventory contracts first. For an older
+Carts prototype database, review and back up before applying the one-time
+`db/migrate_carts_m2_contract.sql` instead. The full Users/Products migrations
+remain owned by those modules.
+
+Run `poetry install --no-root` and `poetry run python -m unittest discover -s tests -v`.
+The PostgreSQL smoke test requires a separate verification database; see the
+validation record for setup. Keep `.flaskenv` and virtual environments untracked.

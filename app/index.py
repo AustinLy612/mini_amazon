@@ -4,6 +4,7 @@ import datetime
 
 from .models.product import Product
 from .models.purchase import Purchase
+from .wishlist import WishlistForm
 
 from flask import Blueprint
 bp = Blueprint('index', __name__)
@@ -22,4 +23,5 @@ def index():
     # render the page by adding information to the index.html file
     return render_template('index.html',
                            avail_products=products,
-                           purchase_history=purchases)
+                           purchase_history=purchases,
+                           wishlist_form=WishlistForm())
