@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Your cart</h2>
+<p>Current prices are estimates until checkout. Items remain in your cart after logout.</p>
+<p><a href="{{ url_for('index.index') }}">Continue browsing</a></p>
+{% if items %}
+<div style="overflow-x:auto">
+<table class="table table-striped">
+  <thead><tr><th>Product</th><th>Seller</th><th>Quantity</th><th>Unit price</th><th>Subtotal</th><th>Availability</th></tr></thead>
+  <tbody>{% for item in items %}
+    <tr><td>{{ item.name }}</td><td>{{ item.seller_name }}</td><td>{{ item.quantity }}</td>
+      <td>${{ '%.2f'|format(item.unit_price) }}</td><td>${{ '%.2f'|format(item.subtotal) }}</td>
+      <td>{% if not item.available %}Unavailable{% elif item.stock < item.quantity %}Only {{ item.stock }} left{% else %}In stock{% endif %}</td></tr>
+  {% endfor %}</tbody>
+</table>
+</div>
+<p><strong>Total: ${{ '%.2f'|format(total) }}</strong></p>
+{% else %}
+<p>Your cart is empty.</p>
+{% endif %}
+<p class="text-muted">Read-only project prototype. Quantity changes, removal, and checkout are planned features.</p>
+{% endblock %}
