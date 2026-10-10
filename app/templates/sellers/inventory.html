@@ -1,0 +1,34 @@
+{% extends "sellers/_layout.html" %}
+{% from "sellers/_pagination.html" import pagination %}
+{% block seller_title %}Your inventory{% endblock %}
+{% block seller_subtitle %}Keep quantities current so buyers can order with confidence.{% endblock %}
+{% block seller_content %}
+<section class="seller-panel">
+  <div class="seller-panel-heading"><h2>Product listings</h2><a class="seller-button" href="{{ url_for('sellers.add_listing') }}">+ Add a listing</a></div>
+  <form class="seller-filters" method="GET" action="{{ url_for('sellers.inventory') }}">
+    <div class="seller-field seller-search"><label for="inventory-search">Search products</label><input id="inventory-search" name="q" value="{{ query }}" maxlength="100" placeholder="Product name or ID"></div>
+    <div class="seller-field"><label for="inventory-sort">Sort by</label><select id="inventory-sort" name="sort">
+      {% for value, label in [('name','Product name'),('stock_low','Stock: low to high'),('stock_high','Stock: high to low'),('price_low','Price: low to high'),('price_high','Price: high to low')] %}<option value="{{ value }}" {% if sort == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select></div><button class="seller-button" type="submit">Apply</button><a class="seller-reset" href="{{ url_for('sellers.inventory') }}">Reset</a>
+  </form>
+  {% if data['items'] %}
+  <p class="seller-table-hint">Swipe sideways to change quantities or remove a listing.</p>
+  <div class="seller-table-wrap" tabindex="0" role="region" aria-label="Inventory listings"><table class="seller-table"><thead><tr><th>Product</th><th>Unit price</th><th>Status</th><th>Available quantity</th><th><span class="seller-sr-only">Remove listing</span></th></tr></thead><tbody>
+  {% for item in data['items'] %}
+    <tr><td><strong>{{ item.name }}</strong><small>Product #{{ item.product_id }}</small></td><td>${{ '%.2f'|format(item.price) }}</td><td><span class="seller-badge {{ 'seller-badge-pending' if item.quantity == 0 else 'seller-badge-fulfilled' }}">{{ 'Out of stock' if item.quantity == 0 else 'In stock' }}</span></td>
+      <td><form class="seller-inline-form" method="POST" action="{{ url_for('sellers.update_listing', product_id=item.product_id) }}">
+        {{ quantity_form.csrf_token(id='stock-token-' ~ item.product_id) }}{{ quantity_form.expected_quantity(value=item.quantity, id='previous-' ~ item.product_id) }}
+        <label class="seller-sr-only" for="quantity-{{ item.product_id }}">Quantity for {{ item.name }}</label>
+        <input id="quantity-{{ item.product_id }}" aria-label="Quantity for {{ item.name }}" name="quantity" type="number" min="0" max="2147483647" step="1" value="{{ item.quantity }}" required>
+        <button class="seller-button seller-button-light" type="submit">Save</button></form></td>
+      <td><form method="POST" action="{{ url_for('sellers.remove_listing', product_id=item.product_id) }}" onsubmit="return confirm('Remove this listing? Existing orders and saved carts will be preserved.');">
+        {{ remove_form.csrf_token(id='remove-token-' ~ item.product_id) }}{{ remove_form.expected_quantity(value=item.quantity, id='remove-previous-' ~ item.product_id) }}<button class="seller-text-button" type="submit" aria-label="Remove {{ item.name }}">Remove</button>
+      </form></td>
+    </tr>
+  {% endfor %}</tbody></table></div>
+  {% elif query %}<div class="seller-empty"><h3>No matching listings</h3><p>Try another product name or clear your search.</p></div>
+  {% else %}<div class="seller-empty"><h3>Start your first listing</h3><p>Choose a product from the catalog and set your available quantity.</p><a class="seller-button" href="{{ url_for('sellers.add_listing') }}">Add a listing</a></div>{% endif %}
+  {{ pagination(data, 'sellers.inventory', q=query, sort=sort) }}
+</section>
+<p class="seller-caption">Saving sets the available quantity. If stock changed while this page was open, refresh before trying again. Removing a listing preserves existing orders and saved carts.</p>
+{% endblock %}

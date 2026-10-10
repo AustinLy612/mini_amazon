@@ -1,0 +1,18 @@
+{% extends "sellers/_layout.html" %}
+{% block seller_title %}Order #{{ order.id }}{% endblock %}
+{% block seller_subtitle %}Placed {{ order.placed_at|seller_time }}{% endblock %}
+{% block seller_content %}
+<a class="seller-back-link" href="{{ url_for('sellers.orders') }}">← Back to orders</a>
+<div class="seller-two-columns">
+  <section class="seller-panel"><h2>Delivery details</h2><span class="seller-label">Buyer</span><strong>{{ order.buyer_name_snapshot }}</strong><p>{{ order.buyer_email }}</p><span class="seller-label">Shipping address at checkout</span><p class="seller-address">{{ order.shipping_address_snapshot }}</p></section>
+  <section class="seller-panel"><h2>Your sales</h2><p class="seller-order-total">${{ '%.2f'|format(order.total) }}</p><p>{{ order.item_count }} units · {{ order.line_count }} order line{{ 's' if order.line_count != 1 else '' }}</p><p><span class="seller-badge seller-badge-{{ order.status }}">{{ 'Partially fulfilled' if order.status == 'partial' else order.status|capitalize }}</span></p><p class="seller-caption">Whole order: {{ 'Fulfilled' if order.overall_fulfilled else 'Awaiting fulfillment' }}.</p></section>
+</div>
+<section class="seller-panel"><div class="seller-panel-heading"><h2>Items you sold</h2><span class="seller-caption">Prices fixed at checkout</span></div>
+  <p class="seller-table-hint">Swipe sideways to view fulfillment controls.</p>
+  <div class="seller-table-wrap" tabindex="0" role="region" aria-label="Your order items"><table class="seller-table"><thead><tr><th>Product</th><th>Quantity</th><th>Unit price</th><th>Subtotal</th><th>Fulfillment</th></tr></thead><tbody>
+  {% for item in order['items'] %}<tr><td><strong>{{ item.product_name_snapshot }}</strong><small>Product #{{ item.product_id }} · Line #{{ item.id }}</small></td><td>{{ item.quantity }}</td><td>${{ '%.2f'|format(item.unit_price) }}</td><td>${{ '%.2f'|format(item.subtotal) }}</td><td>
+    {% if item.fulfilled_at %}<span class="seller-badge seller-badge-fulfilled">Fulfilled</span><small>{{ item.fulfilled_at|seller_time }}</small>{% else %}<form method="POST" action="{{ url_for('sellers.fulfill', item_id=item.id) }}">{{ seller_csrf.csrf_token(id='fulfill-token-' ~ item.id) }}<button class="seller-button" type="submit">Mark fulfilled</button></form>{% endif %}
+  </td></tr>{% endfor %}</tbody></table></div>
+</section>
+<p class="seller-caption">Mark an item fulfilled once it has been sent to the buyer. Inventory and balances were updated when the order was placed.</p>
+{% endblock %}

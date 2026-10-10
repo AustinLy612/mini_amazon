@@ -1,0 +1,11 @@
+{% macro pagination(data, endpoint, q='', sort='', status='') %}
+{% if data.total %}
+<nav class="seller-pagination" aria-label="Results pages">
+  <span>{{ data.total }} result{{ 's' if data.total != 1 else '' }} · Page {{ data.page }} of {{ data.pages }}</span>
+  <div>
+    {% if data.has_previous %}<a class="seller-button seller-button-light" href="{{ url_for(endpoint, page=data.page-1, q=q, sort=sort, status=status) }}">Previous</a>{% endif %}
+    {% if data.has_next %}<a class="seller-button seller-button-light" href="{{ url_for(endpoint, page=data.page+1, q=q, sort=sort, status=status) }}">Next</a>{% endif %}
+  </div>
+</nav>
+{% endif %}
+{% endmacro %}

@@ -1,0 +1,36 @@
+{% extends "sellers/_layout.html" %}
+{% block seller_content %}
+<div class="seller-stats">
+  <article class="seller-stat"><span>Sales revenue</span><strong>${{ '%.2f'|format(data.sales.revenue) }}</strong><small>{{ data.sales.units_sold }} units sold across {{ data.sales.orders }} orders</small></article>
+  <article class="seller-stat"><span>Awaiting fulfillment</span><strong>{{ data.sales.pending_lines }}</strong><small><a href="{{ url_for('sellers.orders', status='pending') }}">Review pending orders →</a></small></article>
+  <article class="seller-stat"><span>Product listings</span><strong>{{ data.stock.listings }}</strong><small>{{ data.stock.stock_units }} units in stock</small></article>
+  <article class="seller-stat"><span>Out of stock</span><strong>{{ data.stock.out_of_stock }}</strong><small><a href="{{ url_for('sellers.inventory', sort='stock_low') }}">Review your inventory →</a></small></article>
+</div>
+<p class="seller-caption">Sales use the prices recorded when orders were placed, including items awaiting fulfillment.</p>
+<div class="seller-two-columns">
+  <section class="seller-panel">
+    <div class="seller-panel-heading"><h2>Sales in the last 30 days</h2><span class="seller-caption">UTC</span></div>
+    {% if data.days %}
+    <div class="seller-chart" aria-label="Revenue by order date">
+      {% for day in data.days %}
+      <div class="seller-chart-row"><span>{{ day.day }}</span><div class="seller-chart-track"><div class="seller-chart-bar" style="width: {{ ((day.revenue / peak * 100)|float)|round(1) if peak else 0 }}%"></div></div><strong>${{ '%.2f'|format(day.revenue) }}</strong></div>
+      {% endfor %}
+    </div>
+    {% else %}<div class="seller-empty"><h3>Your next sale starts here</h3><p>Add a listing so buyers can find your products.</p><a class="seller-button" href="{{ url_for('sellers.add_listing') }}">Add a listing</a></div>{% endif %}
+  </section>
+  <section class="seller-panel">
+    <div class="seller-panel-heading"><h2>Best-selling products</h2><span class="seller-caption">All time</span></div>
+    {% if data.top_products %}<ol class="seller-top-products">
+      {% for product in data.top_products %}<li><div><strong>{{ product.name }}</strong><small>{{ product.units_sold }} units sold</small></div><span>${{ '%.2f'|format(product.revenue) }}</span></li>{% endfor %}
+    </ol>{% else %}<p class="seller-empty-text">Your top products will appear after your first sale.</p>{% endif %}
+  </section>
+</div>
+<section class="seller-panel">
+  <div class="seller-panel-heading"><h2>Orders to fulfill</h2><a href="{{ url_for('sellers.orders', status='pending') }}">View all pending orders →</a></div>
+  {% if data.recent_orders %}
+  <div class="seller-table-wrap"><table class="seller-table"><thead><tr><th>Order</th><th>Buyer</th><th>Placed</th><th>Your sales</th><th>Your status</th><th><span class="seller-sr-only">Open order</span></th></tr></thead><tbody>
+    {% for order in data.recent_orders %}<tr><td>#{{ order.id }}</td><td>{{ order.buyer_name_snapshot }}</td><td>{{ order.placed_at|seller_time }}</td><td>${{ '%.2f'|format(order.total) }}</td><td><span class="seller-badge seller-badge-{{ order.status }}">{{ 'Partially fulfilled' if order.status == 'partial' else 'Pending' }}</span></td><td><a href="{{ url_for('sellers.order_detail', order_id=order.id) }}">Open order →</a></td></tr>{% endfor %}
+  </tbody></table></div>
+  {% else %}<p class="seller-empty-text">You're up to date. No orders are waiting for fulfillment.</p>{% endif %}
+</section>
+{% endblock %}

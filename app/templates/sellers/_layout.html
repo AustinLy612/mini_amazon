@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sellers.css') }}">
+<meta name="csrf-token" content="{{ seller_csrf.csrf_token.current_token }}">
+{% endblock %}
+{% block content %}
+<div class="seller-workspace">
+  <header class="seller-header">
+    <div><p class="seller-eyebrow">MINI AMAZON · SELLER CENTER</p>
+      <h1>{% block seller_title %}Your business, at a glance{% endblock %}</h1>
+      <p class="seller-subtitle">{% block seller_subtitle %}Manage your stock and keep orders moving.{% endblock %}</p>
+    </div>
+    <a class="seller-button seller-button-light" href="{{ url_for('index.index') }}">Back to shopping</a>
+  </header>
+  <nav class="seller-tabs" aria-label="Seller navigation">
+    <a href="{{ url_for('sellers.overview') }}" {% if active == 'overview' %}class="is-active" aria-current="page"{% endif %}>Overview</a>
+    <a href="{{ url_for('sellers.inventory') }}" {% if active == 'inventory' %}class="is-active" aria-current="page"{% endif %}>Inventory</a>
+    <a href="{{ url_for('sellers.orders') }}" {% if active == 'orders' %}class="is-active" aria-current="page"{% endif %}>Orders</a>
+  </nav>
+  {% for category, message in get_flashed_messages(with_categories=true) %}
+  <div class="seller-notice seller-notice-{{ category }}" role="status">{{ message }}</div>
+  {% endfor %}
+  {% block seller_content %}{% endblock %}
+</div>
+{% endblock %}
