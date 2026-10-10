@@ -3,6 +3,7 @@
 
 <head>
   <title>Mini Amazon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -43,6 +44,7 @@
         color: #fff;
     }
   </style>
+  {% block styles %}{% endblock %}
 </head>
 
 <body>
@@ -51,7 +53,7 @@
       <h1 style="color:aliceblue">Welcome to CompSci 316 Mini Amazon!</h1>
       <div style="color: aliceblue; text-align: right; margin-bottom: 25px">
         {% if current_user.is_authenticated %}
-          Hello {{current_user.firstname}}! <a href="{{ url_for('wishlist.wishlist') }}" class="btn btn-light">Wishlist</a> <a href="{{ url_for('carts.cart') }}" class="btn btn-light">Cart</a> <a href="{{ url_for('users.logout') }}" type="button" class="btn btn-light">Log out</a>
+          Hello {{current_user.firstname}}! <a href="{{ url_for('wishlist.wishlist') }}" class="btn btn-light">Wishlist</a> <a href="{{ url_for('carts.cart') }}" class="btn btn-light">Cart</a> <a href="{{ url_for('sellers.overview') }}" class="btn btn-light">Seller center</a> <a href="{{ url_for('users.logout') }}" type="button" class="btn btn-light">Log out</a>
         {% else %}
           <a href="{{ url_for('users.login') }}" type="button" class="btn btn-light">Log in</a>
         {% endif %}

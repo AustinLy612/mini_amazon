@@ -1,0 +1,23 @@
+{% extends "sellers/_layout.html" %}
+{% from "sellers/_pagination.html" import pagination %}
+{% block seller_title %}Your orders{% endblock %}
+{% block seller_subtitle %}Find buyers' orders and fulfill the items you sold.{% endblock %}
+{% block seller_content %}
+<section class="seller-panel">
+  <div class="seller-panel-heading"><h2>Order history</h2><span class="seller-caption">Newest first</span></div>
+  <form class="seller-filters" method="GET" action="{{ url_for('sellers.orders') }}">
+    <div class="seller-field seller-search"><label for="order-search">Search orders</label><input id="order-search" name="q" value="{{ query }}" maxlength="100" placeholder="Order ID, buyer, address or your product"></div>
+    <div class="seller-field"><label for="order-status">Your items</label><select id="order-status" name="status">{% for value, label in [('all','All orders'),('pending','Awaiting fulfillment'),('fulfilled','Fulfilled')] %}<option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+    <button class="seller-button" type="submit">Apply</button><a class="seller-reset" href="{{ url_for('sellers.orders') }}">Reset</a>
+  </form>
+  {% if data['items'] %}<div class="seller-order-cards">
+  {% for order in data['items'] %}<article class="seller-order-card">
+    <div class="seller-order-card-heading"><div><a class="seller-order-number" href="{{ url_for('sellers.order_detail', order_id=order.id) }}">Order #{{ order.id }}</a><p class="seller-caption">{{ order.placed_at|seller_time }}</p></div><span class="seller-badge seller-badge-{{ order.status }}">{{ 'Partially fulfilled' if order.status == 'partial' else order.status|capitalize }}</span></div>
+    <div class="seller-order-card-grid"><div><span class="seller-label">Buyer</span><strong>{{ order.buyer_name_snapshot }}</strong><small>{{ order.buyer_email }}</small></div><div><span class="seller-label">Ship to</span><p class="seller-address">{{ order.shipping_address_snapshot }}</p></div><div><span class="seller-label">Your sales</span><strong>${{ '%.2f'|format(order.total) }}</strong><small>{{ order.item_count }} units · {{ order.line_count }} line{{ 's' if order.line_count != 1 else '' }}</small></div><div><span class="seller-label">Whole order</span><strong>{{ 'Fulfilled' if order.overall_fulfilled else 'Awaiting fulfillment' }}</strong><small>{{ order.pending_count }} of your lines pending</small></div></div>
+    <div class="seller-order-card-footer"><a class="seller-button seller-button-light" href="{{ url_for('sellers.order_detail', order_id=order.id) }}">View and fulfill →</a></div>
+  </article>{% endfor %}</div>
+  {% else %}<div class="seller-empty"><h3>{{ 'No matching orders' if query or status != 'all' else 'Your orders will appear here' }}</h3><p>{{ 'Try another search or status.' if query or status != 'all' else 'When a buyer places an order for one of your products, you can fulfill it here.' }}</p></div>{% endif %}
+  {{ pagination(data, 'sellers.orders', q=query, status=status) }}
+</section>
+<p class="seller-caption">Amounts and item counts cover your sales only. Whole-order status indicates whether every seller has fulfilled their items.</p>
+{% endblock %}

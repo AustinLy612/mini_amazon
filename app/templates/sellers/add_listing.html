@@ -1,0 +1,21 @@
+{% extends "sellers/_layout.html" %}
+{% from "sellers/_pagination.html" import pagination %}
+{% block seller_title %}Add a product listing{% endblock %}
+{% block seller_subtitle %}Choose an existing product and set how many units you can sell.{% endblock %}
+{% block seller_content %}
+<section class="seller-panel">
+  <div class="seller-panel-heading"><h2>Browse the catalog</h2><a href="{{ url_for('sellers.inventory') }}">← Back to inventory</a></div>
+  <form class="seller-filters" method="GET" action="{{ url_for('sellers.add_listing') }}"><div class="seller-field seller-search"><label for="catalog-search">Search products</label><input id="catalog-search" name="q" value="{{ query }}" maxlength="100" placeholder="Product name or ID"></div><button class="seller-button" type="submit">Search</button><a class="seller-reset" href="{{ url_for('sellers.add_listing') }}">Reset</a></form>
+  {% if data['items'] %}
+  <div class="seller-table-wrap"><table class="seller-table"><thead><tr><th>Product</th><th>Unit price</th><th>Initial quantity</th></tr></thead><tbody>
+    {% for item in data['items'] %}<tr><td><strong>{{ item.name }}</strong><small>Product #{{ item.product_id }}</small></td><td>${{ '%.2f'|format(item.price) }}</td><td>
+      <form class="seller-inline-form" method="POST" action="{{ url_for('sellers.add_listing') }}">
+        {{ form.csrf_token(id='add-token-' ~ item.product_id) }}{{ form.product_id(value=item.product_id, id='product-' ~ item.product_id) }}
+        <label class="seller-sr-only" for="new-quantity-{{ item.product_id }}">Initial quantity for {{ item.name }}</label><input id="new-quantity-{{ item.product_id }}" name="quantity" type="number" min="0" max="2147483647" step="1" value="1" required>
+        <button class="seller-button" type="submit">Add listing</button>
+      </form></td></tr>{% endfor %}
+  </tbody></table></div>
+  {% else %}<div class="seller-empty"><h3>No products to add</h3><p>Try another search. Products already in your inventory can be updated on the Inventory page.</p><a class="seller-button seller-button-light" href="{{ url_for('sellers.inventory') }}">View inventory</a></div>{% endif %}
+  {{ pagination(data, 'sellers.add_listing', q=query) }}
+</section>
+{% endblock %}

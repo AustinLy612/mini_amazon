@@ -1,0 +1,4 @@
+{% extends "sellers/_layout.html" %}
+{% block seller_title %}We couldn't complete that request{% endblock %}
+{% block seller_subtitle %}Your data is safe. Review the message and try again.{% endblock %}
+{% block seller_content %}<section class="seller-panel seller-empty"><p role="alert">{{ message }}</p><a class="seller-button" href="{{ url_for('sellers.inventory') }}">View inventory</a> <a class="seller-button seller-button-light" href="{{ url_for('sellers.orders') }}">View orders</a></section>{% endblock %}

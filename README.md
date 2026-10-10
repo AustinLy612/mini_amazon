@@ -156,3 +156,26 @@ remain owned by those modules.
 Run `poetry install --no-root` and `poetry run python -m unittest discover -s tests -v`.
 The PostgreSQL smoke test requires a separate verification database; see the
 validation record for setup. Keep `.flaskenv` and virtual environments untracked.
+
+## Sellers: inventory and order fulfillment
+
+Sellers can add products from the shared catalog, update stock, remove listings,
+search their orders, and fulfill their own order items. `/seller` provides sales
+and inventory summaries. Removing a listing preserves saved carts and order
+history; fulfillment changes only the owned item's timestamp.
+
+See the [Chinese setup and teammate handoff](docs/sellers/README_中文.md),
+[JSON and database contracts](docs/sellers/INTEGRATION.md), and
+[validation results](docs/sellers/VALIDATION.md).
+
+For a **new** development database, run
+`poetry run python tools/setup_sellers.py --database mini_amazon_sellers_dev --demo`.
+The script uses your local PostgreSQL configuration, refuses existing database
+names, and preserves an existing `.flaskenv`. Set its `DB_NAME` to the newly
+created database before starting Flask. For an existing, compatible shared
+database, apply only `db/sellers_schema.sql`; review the Carts schema first.
+`install.sh` and `db/setup.sh` can recreate the skeleton database.
+
+This contribution builds on `ziyi-carts-milestone2`. Carts currently provides
+authenticated reads; checkout and the final Users/Products modules remain team
+work. The optional demo orders are synthetic fixtures, not a checkout feature.
