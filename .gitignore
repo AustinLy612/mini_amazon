@@ -8,3 +8,5 @@ poetry.lock
 .DS_Store
 
 .validation/
+submission/
+.pytest_cache/

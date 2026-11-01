@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Explore your account and products</h2>
+<p>Browse the most expensive products, view purchases, inspect your saved cart, or manage inventory.</p>
+<section class="query-card"><h3>Most expensive products</h3>
+<form action="{{ url_for('milestone3.top_products') }}" method="get">
+<label for="top-k">Number of products (k)</label>
+<input id="top-k" type="number" name="k" min="1" max="1000" value="5" required>
+<button type="submit" class="btn btn-dark">Find products</button></form></section>
+{% if current_user.is_authenticated %}
+<p>Signed in as {{ current_user.firstname }} {{ current_user.lastname }} · Account #{{ current_user.id }}</p>
+<div class="query-links">
+<a class="btn btn-dark" href="{{ url_for('milestone3.purchases') }}">Purchase history</a>
+<a class="btn btn-dark" href="{{ url_for('carts.cart') }}">View cart</a>
+<a class="btn btn-dark" href="{{ url_for('sellers.inventory') }}">View inventory</a>
+</div>
+{% else %}<p><a href="{{ url_for('users.login') }}">Log in</a> to view your purchases, cart and inventory.</p>{% endif %}
+{% endblock %}

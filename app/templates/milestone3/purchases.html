@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Your purchase history</h2>
+<p>Account #{{ current_user.id }} · All {{ orders|length }} orders, newest first. Prices are final checkout prices.</p>
+<div class="table-scroll"><table class="table"><thead><tr><th>Order</th><th>Placed</th><th>Items</th><th>Total</th><th>Status</th><th>Details</th></tr></thead>
+<tbody>{% for order in orders %}<tr><td>#{{ order.id }}</td><td>{{ order.placed_at|seller_time }}</td><td>{{ order.item_count }}</td><td>${{ '%.2f'|format(order.total) }}</td><td>{{ order.status }}</td><td><a href="{{ url_for('milestone3.order_detail', order_id=order.id) }}">View order {{ order.id }}</a></td></tr>
+{% else %}<tr><td colspan="6">You have no purchases yet.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<a href="{{ url_for('milestone3.purchases') }}">Back to purchase history</a>
+<h2>Order #{{ order.id }}</h2><p>{{ order.placed_at|seller_time }}</p>
+<p>Deliver to: {{ order.buyer_name }}</p><p style="white-space:pre-line">{{ order.address }}</p>
+<div class="table-scroll"><table class="table"><thead><tr><th>Product</th><th>Seller</th><th>Quantity</th><th>Final unit price</th><th>Fulfilled</th></tr></thead>
+<tbody>{% for line in order['items'] %}<tr><td>{{ line.name }}</td><td>{{ line.seller_name }} (#{{ line.seller_id }})</td><td>{{ line.quantity }}</td><td>${{ '%.2f'|format(line.unit_price) }}</td><td>{{ line.fulfilled_at|seller_time }}</td></tr>{% endfor %}</tbody></table></div>
+<p><strong>Total: ${{ '%.2f'|format(order.total) }}</strong></p>
+{% endblock %}

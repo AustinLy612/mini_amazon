@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Most expensive products</h2>
+<form method="get"><label for="top-k">Number of products (k)</label>
+<input id="top-k" name="k" type="number" min="1" max="1000" value="{{ k }}" required>
+<button type="submit" class="btn btn-dark">Find products</button></form>
+{% if error %}<p role="alert">{{ error }}</p>{% else %}
+<p>Requested {{ k }}; showing {{ products|length }} products. Sorted by price, highest first.</p>
+<div class="table-scroll"><table class="table"><thead><tr><th>ID</th><th>Product</th><th>Price</th></tr></thead>
+<tbody>{% for p in products %}<tr><td>{{ p.id }}</td><td>{{ p.name }}</td><td>${{ '%.2f'|format(p.price) }}</td></tr>
+{% else %}<tr><td colspan="3">No products found.</td></tr>{% endfor %}</tbody></table></div>{% endif %}
+{% endblock %}

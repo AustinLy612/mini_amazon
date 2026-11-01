@@ -1,0 +1,11 @@
+# Runtime dependencies; the original Poetry workflow remains supported.
+Flask==2.3.3
+Werkzeug==2.3.7
+Flask-SQLAlchemy>=3.0.5,<4
+Flask-WTF>=1.1.1,<2
+psycopg2-binary>=2.9.7,<3
+Flask-Login>=0.6.2,<0.7
+email-validator>=2.0.0.post2,<3
+Faker>=19.3.1,<20
+python-dotenv>=1.0,<2
+humanize>=4,<5
