@@ -24,11 +24,11 @@ Sellers 使用它已有的表和登录流程，保留队友的实现。
 
 ### 新建独立开发数据库
 
-先切到 Sellers 分支并安装已有依赖：
+先切到包含 Sellers 功能的集成分支并安装已有依赖：
 
 ```bash
 git fetch origin
-git switch codex/sellers-inventory-fulfillment
+git switch milestone3
 poetry install --no-root
 ```
 

@@ -1,7 +1,7 @@
 Mini-Amazon — Milestone 3
 Standard project option
 Repository: https://github.com/AustinLy612/mini_amazon
-Integrated branch: codex/milestone3
+Integrated branch: milestone3
 
 TEAM AND WORK SINCE MILESTONE 2
 Leyang Han — Users Guru: SQL-backed buyer purchase history using the shared
