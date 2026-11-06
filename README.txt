@@ -60,10 +60,10 @@ assigns seller IDs 1 and 2 and buyer ID 3. Private ID endpoints require that
 the supplied ID matches the authenticated account; other IDs return 403.
 
 VIDEO
-The required team-narrated video has not yet been recorded or uploaded.
-A real, accessible video URL must be added here before course submission.
-The under-three-minute recording sequence and role-specific narration are in
-docs/milestone3/DEMO.md. No fabricated video link is supplied.
+Milestone3_Final_179s.mp4 accompanies the submission files.
+Duration: 2 minutes 59 seconds, with narration by the four module members.
+Order: Products, Users, Carts, Sellers.
+Video link: https://drive.google.com/file/d/1qvJginDU6sKi5lARdyFLJvPmYLZmfzf3/view?usp=sharing
 
 VERIFICATION
 See docs/milestone3/VALIDATION.md for executed checks and reproduction commands.

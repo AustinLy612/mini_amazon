@@ -31,6 +31,10 @@ M3_TEST_DB=mini_amazon_m3_demo
 
 The seller PostgreSQL suite resets data only in its explicitly guarded verification database; it never accepts the normal application database as its reset target. The M3 PostgreSQL tests read the separately seeded demo database without modifying its fixtures. Setup refuses to overwrite an existing database. Without opt-in variables, native PostgreSQL tests are skipped explicitly.
 
-## Remaining submission step
+## Submission video
 
-The course's team-narrated video is not yet supplied. Record the flow in DEMO.md, publish a viewable link, add it to README.txt, and rebuild the submission package. The code does not implement final-stage checkout/profile/catalog editing; these are not the four M3 required queries. The synthetic paid-order fixtures do not imply that checkout exists.
+The completed video is Milestone3_Final_179s.mp4, lasting 2 minutes 59 seconds, with the four members' supplied narration. It presents Products, Users, Carts and Sellers.
+
+Video: https://drive.google.com/file/d/1qvJginDU6sKi5lARdyFLJvPmYLZmfzf3/view?usp=sharing
+
+The code does not implement final-stage checkout/profile/catalog editing; these are not the four M3 required queries. Synthetic paid-order fixtures do not imply that checkout exists.

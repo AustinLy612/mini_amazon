@@ -21,7 +21,7 @@ def main():
                 continue
             if path.name in {'.env', '.flaskenv'} or path.suffix in {'.pyc', '.key', '.pem', '.zip'}:
                 continue
-            if path.parts[0] == 'docs' and not name.startswith('docs/milestone3/'):
+            if path.parts[0] == 'docs' and name != 'docs/milestone3/VALIDATION.md':
                 continue
             if (ROOT / path).is_file():
                 archive.write(ROOT / path, path.as_posix())
